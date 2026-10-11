@@ -1,0 +1,25 @@
+<!-- Nothing just a redirector to given port, meant for microsoft auth in the launcher -->
+
+<h1>Please Wait..</h1>
+<h2>Redirecting to the launcher...</h2>
+<h6 style="display:none">If you believe this is an error, please contact us via <a href="https://dsc.gg/syaniclauncher" target="_blank">dsc.gg/syaniclauncher</a> by creating a ticket.</h6>
+
+<style>
+body {font-family: Arial, sans-serif; text-align: center; margin-top: 20%; background-color: #000000; color: #ffffff;}
+a {color: #1E90FF; text-decoration: none;}
+</style>
+
+<script>
+const params = new URLSearchParams(location.search);
+const code = params.get("code"), state = params.get("state");
+const match = state?.match(/^port(\d{1,5})$/);
+const port = match && +match[1]; // port is in state as "port12345" where 12345 is the port number
+
+if (code && port >= 1 && port <= 65535) {
+    location.href = `http://localhost:${port}/auth_callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
+} else {
+    document.querySelector("h1").textContent = "Authentication failed";
+    document.querySelector("h2").textContent = "Missing or invalid code/state.";
+    document.querySelector("h6").style.display = "block";
+}
+</script>
